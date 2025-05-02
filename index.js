@@ -507,7 +507,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem('parkingSession', JSON.stringify(parkingData));
         
         // Перенаправляємо на сторінку успіху
-        window.location.href = 'success.html';
+        // window.location.href = 'success.html';
     }
     // // Функція для оновлення інтерфейсу після оплати
     // function updateUIAfterPayment() {

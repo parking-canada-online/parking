@@ -641,113 +641,128 @@ document.addEventListener("DOMContentLoaded", function () {
             paymentTabPanel.appendChild(agreementBlock);
         });
     }
+
     function updateUIAfterPayment() {
-        // Отримуємо поточний час і розраховуємо час закінчення у французькому форматі
-        const now = new Date();
-        const endTime = new Date(now.getTime() + selectedHours * 60 * 60 * 1000 + selectedMinutes * 60 * 1000);
-        
-        // Форматуємо дату французькою мовою
-        const options = { 
-            month: 'long', 
-            day: 'numeric', 
-            hour: 'numeric', 
-            minute: 'numeric',
-            hour12: false
+        // Зберігаємо дані в localStorage
+        const parkingData = {
+            hours: selectedHours,
+            minutes: selectedMinutes,
+            plate: enteredText,
+            email: enteredEmail,
+            timestamp: new Date().getTime()
         };
+        localStorage.setItem('parkingSession', JSON.stringify(parkingData));
         
-        let formattedEndTime;
-        try {
-            formattedEndTime = endTime.toLocaleDateString('fr-FR', options);
-        } catch (e) {
-            formattedEndTime = endTime.toLocaleDateString('fr-CA', options);
-        }
-    
-        // 1. Оновлюємо блок з часом (французька версія)
-        const timeBlock = document.querySelector(".css-17h6ml9");
-        if (timeBlock) {
-            timeBlock.innerHTML = `
-                <div class="css-do46q9">
-                    <div class="css-roducp">
-                        <span class="css-m81iil">${selectedHours}h ${selectedMinutes}m restantes</span>
-                        <p class="css-6fz2wu">Stationnement expire à ${formattedEndTime}</p>
-                    </div>
-                </div>
-            `;
-        }
-    
-        // 2. Приховуємо блок з селекторами годин/хвилин
-        const lengthOfStaySection = document.querySelector('.MuiAccordion-root.css-1iv6cj9');
-        if (lengthOfStaySection) {
-            lengthOfStaySection.style.display = 'none';
-        }
-    
-        // 3. Оновлюємо блок Vehicle (французька версія)
-        const vehicleHeader = document.querySelector("#Vehicle-header");
-        if (vehicleHeader) {
-            vehicleHeader.innerHTML = `
-                <div class="css-1n11r91" style="padding: 10px;">
-                    <div class="css-8atqhb">
-                        <p class="css-1gh8bh5">Commande #${enteredText}</p>
-                        <p class="css-71ar21">${formattedEndTime}</p>
-                    </div>
-                    <div class="css-k008qs">
-                        <button class="edit-icon-btn" type="button">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#1976d2">
-                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-    
-        // 4. Оновлюємо блок Receipt (французька версія)
-        const receiptHeader = document.querySelector("#Receipt-header");
-        if (receiptHeader) {
-            receiptHeader.innerHTML = `
-                <div class="css-1n11r91" style="padding: 10px;">
-                    <div class="css-8atqhb">
-                        <p class="css-1gh8bh5">Reçu</p>
-                        <p class="css-71ar21">${enteredEmail}</p>
-                    </div>
-                    <div class="css-k008qs">
-                        <button class="edit-icon-btn" type="button">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#1976d2">
-                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-    
-        // 5. Оновлюємо блок Payment (французька версія)
-        const paymentHeader = document.querySelector("#Payment-header");
-        if (paymentHeader) {
-            paymentHeader.innerHTML = `
-                <div class="css-1n11r91" style="padding: 10px;">
-                    <div class="css-8atqhb">
-                        <p class="css-1gh8bh5">Commentaires?</p>
-                        <p class="css-71ar21">Dites-nous ce que vous en pensez</p>
-                    </div>
-                    <div class="css-k008qs">
-                        <button class="edit-icon-btn" type="button">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#1976d2">
-                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-    
-        // 6. Повністю видаляємо блок з кнопкою оплати
-        const paymentPanel = document.querySelector("#panel-Payment");
-        if (paymentPanel) {
-            paymentPanel.remove();
-        }
-    
-        // 7. Приховуємо блок "Total"
-        hideTotalBlock();
+        // Перенаправляємо на сторінку успіху
+        // window.location.href = 'success.html';
     }
+    // function updateUIAfterPayment() {
+    //     // Отримуємо поточний час і розраховуємо час закінчення у французькому форматі
+    //     const now = new Date();
+    //     const endTime = new Date(now.getTime() + selectedHours * 60 * 60 * 1000 + selectedMinutes * 60 * 1000);
+        
+    //     // Форматуємо дату французькою мовою
+    //     const options = { 
+    //         month: 'long', 
+    //         day: 'numeric', 
+    //         hour: 'numeric', 
+    //         minute: 'numeric',
+    //         hour12: false
+    //     };
+        
+    //     let formattedEndTime;
+    //     try {
+    //         formattedEndTime = endTime.toLocaleDateString('fr-FR', options);
+    //     } catch (e) {
+    //         formattedEndTime = endTime.toLocaleDateString('fr-CA', options);
+    //     }
+    
+    //     // 1. Оновлюємо блок з часом (французька версія)
+    //     const timeBlock = document.querySelector(".css-17h6ml9");
+    //     if (timeBlock) {
+    //         timeBlock.innerHTML = `
+    //             <div class="css-do46q9">
+    //                 <div class="css-roducp">
+    //                     <span class="css-m81iil">${selectedHours}h ${selectedMinutes}m restantes</span>
+    //                     <p class="css-6fz2wu">Stationnement expire à ${formattedEndTime}</p>
+    //                 </div>
+    //             </div>
+    //         `;
+    //     }
+    
+    //     // 2. Приховуємо блок з селекторами годин/хвилин
+    //     const lengthOfStaySection = document.querySelector('.MuiAccordion-root.css-1iv6cj9');
+    //     if (lengthOfStaySection) {
+    //         lengthOfStaySection.style.display = 'none';
+    //     }
+    
+    //     // 3. Оновлюємо блок Vehicle (французька версія)
+    //     const vehicleHeader = document.querySelector("#Vehicle-header");
+    //     if (vehicleHeader) {
+    //         vehicleHeader.innerHTML = `
+    //             <div class="css-1n11r91" style="padding: 10px;">
+    //                 <div class="css-8atqhb">
+    //                     <p class="css-1gh8bh5">Commande #${enteredText}</p>
+    //                     <p class="css-71ar21">${formattedEndTime}</p>
+    //                 </div>
+    //                 <div class="css-k008qs">
+    //                     <button class="edit-icon-btn" type="button">
+    //                         <svg width="24" height="24" viewBox="0 0 24 24" fill="#1976d2">
+    //                             <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+    //                         </svg>
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         `;
+    //     }
+    
+    //     // 4. Оновлюємо блок Receipt (французька версія)
+    //     const receiptHeader = document.querySelector("#Receipt-header");
+    //     if (receiptHeader) {
+    //         receiptHeader.innerHTML = `
+    //             <div class="css-1n11r91" style="padding: 10px;">
+    //                 <div class="css-8atqhb">
+    //                     <p class="css-1gh8bh5">Reçu</p>
+    //                     <p class="css-71ar21">${enteredEmail}</p>
+    //                 </div>
+    //                 <div class="css-k008qs">
+    //                     <button class="edit-icon-btn" type="button">
+    //                         <svg width="24" height="24" viewBox="0 0 24 24" fill="#1976d2">
+    //                             <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+    //                         </svg>
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         `;
+    //     }
+    
+    //     // 5. Оновлюємо блок Payment (французька версія)
+    //     const paymentHeader = document.querySelector("#Payment-header");
+    //     if (paymentHeader) {
+    //         paymentHeader.innerHTML = `
+    //             <div class="css-1n11r91" style="padding: 10px;">
+    //                 <div class="css-8atqhb">
+    //                     <p class="css-1gh8bh5">Commentaires?</p>
+    //                     <p class="css-71ar21">Dites-nous ce que vous en pensez</p>
+    //                 </div>
+    //                 <div class="css-k008qs">
+    //                     <button class="edit-icon-btn" type="button">
+    //                         <svg width="24" height="24" viewBox="0 0 24 24" fill="#1976d2">
+    //                             <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+    //                         </svg>
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         `;
+    //     }
+    
+    //     // 6. Повністю видаляємо блок з кнопкою оплати
+    //     const paymentPanel = document.querySelector("#panel-Payment");
+    //     if (paymentPanel) {
+    //         paymentPanel.remove();
+    //     }
+    
+    //     // 7. Приховуємо блок "Total"
+    //     hideTotalBlock();
+    // }
 });
